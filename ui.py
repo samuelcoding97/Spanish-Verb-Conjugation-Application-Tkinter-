@@ -129,6 +129,13 @@ class MainPage(tk.Frame):
                             command=lambda: controller.show_frame(Advanced))
         button8.place(anchor='center', relx=.5, rely=.8)
 
+        quit_button = tk.Button(self,
+                                font=('Arial', 14),
+                                text='Quit',
+                                bg='cyan',
+                                command=lambda: launcher.destroy())
+        quit_button.place(anchor='center', relx=.9, rely=.9)
+
 
 class Regular(tk.Frame):
     def __init__(self, parent, controller):
@@ -403,5 +410,6 @@ class Advanced(tk.Frame):
 
 
 if __name__ == "__main__":
-    testObj = Windows()
-    testObj.mainloop()
+    launcher = Windows()
+    launcher.attributes('-fullscreen', True)
+    launcher.mainloop()
