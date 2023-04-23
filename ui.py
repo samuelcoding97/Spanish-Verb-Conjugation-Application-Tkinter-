@@ -1,4 +1,5 @@
 import tkinter as tk
+# from tkinter import ttk
 
 class Windows(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -33,6 +34,24 @@ class Windows(tk.Tk):
         # raises the current frame to the top
         frame.tkraise()
 
+    def help_popup(self):
+        popup = tk.Toplevel(launcher)
+        popup.title('Help')
+        popup.geometry('500x250')
+        popup_label = tk.Label(popup,
+                               text='Welcome to Spanish Verb Practice! To use \n'
+                                    'this application select one of the options\n'
+                                    'below. If you are new to the application, \n'
+                                    'try the first option, “Regular Verbs”.      ',
+                               font='Arial 14')
+        popup_label.place(anchor='w', relx=.1, rely=.4)
+        close_button = tk.Button(popup,
+                                font=('Arial', 14),
+                                text='OK',
+                                bg='cyan',
+                                command=lambda: popup.destroy())
+        close_button.place(anchor='center', relx=.8, rely=.8)
+
 
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -50,18 +69,25 @@ class MainPage(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-                                fg='blue',
-                                relief='flat',
-                                font='Arial 12 underline',
-                                text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
+
+        quit_button = tk.Button(self,
+                                font=('Arial', 14),
+                                text='Quit',
+                                bg='cyan',
+                                command=lambda: launcher.destroy())
+        quit_button.place(anchor='center', relx=.9, rely=.9)
 
         button1 = tk.Button(self,
                             width=17,
                             height=2,
                             font=('Arial', 16),
                             borderwidth=7,
-                            text='Regular',
+                            text='Regular Verbs',
                             bg='#CCCCFF',
                             command=lambda: controller.show_frame(Regular))
         button1.place(anchor='center', relx=.3, rely=.5)
@@ -88,7 +114,7 @@ class MainPage(tk.Frame):
                             height=2,
                             font=('Arial', 16),
                             borderwidth=7,
-                            text='Reflexive',
+                            text='Reflexive Verbs',
                             bg='#CCCCFF',
                             command=lambda: controller.show_frame(Reflexive))
         button4.place(anchor='center', relx=.3, rely=.65)
@@ -106,7 +132,7 @@ class MainPage(tk.Frame):
                             height=2,
                             font=('Arial', 16),
                             borderwidth=7,
-                            text='Irregular',
+                            text='Irregular Verbs',
                             bg='#CCCCFF',
                             command=lambda: controller.show_frame(Irregular))
         button6.place(anchor='center', relx=.7, rely=.65)
@@ -128,13 +154,6 @@ class MainPage(tk.Frame):
                             bg='#CCCCFF',
                             command=lambda: controller.show_frame(Advanced))
         button8.place(anchor='center', relx=.5, rely=.8)
-
-        quit_button = tk.Button(self,
-                                font=('Arial', 14),
-                                text='Quit',
-                                bg='cyan',
-                                command=lambda: launcher.destroy())
-        quit_button.place(anchor='center', relx=.9, rely=.9)
 
 
 class Regular(tk.Frame):
@@ -186,7 +205,7 @@ class StemChange(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         home_button.pack(padx=10, pady=10)
 
-        help_button = tk.Button(
+        help_button = tk.Button(self,
             fg='blue',
             relief='flat',
             font='Arial 12 underline',
@@ -220,7 +239,7 @@ class SpellChange(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         home_button.pack(padx=10, pady=10)
 
-        help_button = tk.Button(
+        help_button = tk.Button(self,
             fg='blue',
             relief='flat',
             font='Arial 12 underline',
@@ -254,7 +273,7 @@ class Reflexive(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         home_button.pack(padx=10, pady=10)
 
-        help_button = tk.Button(
+        help_button = tk.Button(self,
             fg='blue',
             relief='flat',
             font='Arial 12 underline',
@@ -288,7 +307,7 @@ class IrregularYo(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         home_button.pack(padx=10, pady=10)
 
-        help_button = tk.Button(
+        help_button = tk.Button(self,
             fg='blue',
             relief='flat',
             font='Arial 12 underline',
@@ -322,7 +341,7 @@ class Irregular(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         home_button.pack(padx=10, pady=10)
 
-        help_button = tk.Button(
+        help_button = tk.Button(self,
             fg='blue',
             relief='flat',
             font='Arial 12 underline',
@@ -356,7 +375,7 @@ class AllVerbs(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         home_button.pack(padx=10, pady=10)
 
-        help_button = tk.Button(
+        help_button = tk.Button(self,
             fg='blue',
             relief='flat',
             font='Arial 12 underline',
@@ -390,7 +409,7 @@ class Advanced(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         home_button.pack(padx=10, pady=10)
 
-        help_button = tk.Button(
+        help_button = tk.Button(self,
             fg='blue',
             relief='flat',
             font='Arial 12 underline',
