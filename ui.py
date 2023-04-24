@@ -174,6 +174,7 @@ class Regular(tk.Frame):
         self._conjugated = ""
         self._correct = 0
         self._total = 0
+        self._percent = "-"
 
         home_button = tk.Button(self,
                                 text="Spanish Verb Practice",
@@ -290,7 +291,7 @@ class Regular(tk.Frame):
                                   borderwidth=7,
                                   text='á',
                                   command=lambda: self.text_input('á'))
-        a_accent_button.place(anchor='center', relx=.2, rely=.85)
+        a_accent_button.place(anchor='center', relx=.35, rely=.85)
         e_accent_button = tk.Button(self,
                                   width=1,
                                   height=1,
@@ -299,7 +300,7 @@ class Regular(tk.Frame):
                                   borderwidth=7,
                                   text='é',
                                   command=lambda: self.text_input('é'))
-        e_accent_button.place(anchor='center', relx=.23, rely=.85)
+        e_accent_button.place(anchor='center', relx=.38, rely=.85)
         i_accent_button = tk.Button(self,
                                   width=1,
                                   height=1,
@@ -308,7 +309,7 @@ class Regular(tk.Frame):
                                   borderwidth=7,
                                   text='í',
                                   command=lambda: self.text_input('í'))
-        i_accent_button.place(anchor='center', relx=.26, rely=.85)
+        i_accent_button.place(anchor='center', relx=.41, rely=.85)
         o_accent_button = tk.Button(self,
                                   width=1,
                                   height=1,
@@ -317,7 +318,7 @@ class Regular(tk.Frame):
                                   borderwidth=7,
                                   text='ó',
                                   command=lambda: self.text_input('ó'))
-        o_accent_button.place(anchor='center', relx=.29, rely=.85)
+        o_accent_button.place(anchor='center', relx=.44, rely=.85)
         u_accent_button = tk.Button(self,
                                   width=1,
                                   height=1,
@@ -326,7 +327,7 @@ class Regular(tk.Frame):
                                   borderwidth=7,
                                   text='ú',
                                   command=lambda: self.text_input('ú'))
-        u_accent_button.place(anchor='center', relx=.32, rely=.85)
+        u_accent_button.place(anchor='center', relx=.47, rely=.85)
         nyay_accent_button = tk.Button(self,
                                     width=1,
                                     height=1,
@@ -335,15 +336,14 @@ class Regular(tk.Frame):
                                     borderwidth=7,
                                     text='ñ',
                                     command=lambda: self.text_input('ñ'))
-        nyay_accent_button.place(anchor='center', relx=.35, rely=.85)
+        nyay_accent_button.place(anchor='center', relx=.5, rely=.85)
 
-        # create a score label
         self._score_frame = tk.Frame(self,
                                width=200,
-                               height=125,
+                               height=150,
                                bg='cyan',
                                borderwidth=7)
-        self._score_frame.place(anchor='center', relx=.7, rely=.5)
+        self._score_frame.place(anchor='center', relx=.7, rely=.55)
         score_label = tk.Label(self._score_frame,
                                width=10,
                                height=1,
@@ -359,9 +359,9 @@ class Regular(tk.Frame):
                                  font=('Arial', 16),
                                  borderwidth=7,
                                  text=self._correct)
-        self._score_correct.place(anchor='center', relx=.3, rely=.6)
+        self._score_correct.place(anchor='center', relx=.3, rely=.5)
         score_slash = tk.Label(self._score_frame, width=1, height=1, bg='cyan', font=('Arial', 24), text="/")
-        score_slash.place(anchor='center', relx=.5, rely=.6)
+        score_slash.place(anchor='center', relx=.5, rely=.5)
         self._score_total = tk.Label(self._score_frame,
                                width=4,
                                height=1,
@@ -369,7 +369,15 @@ class Regular(tk.Frame):
                                font=('Arial', 16),
                                borderwidth=7,
                                text=self._total)
-        self._score_total.place(anchor='center', relx=.7, rely=.6)
+        self._score_total.place(anchor='center', relx=.7, rely=.5)
+        self._score_percent = tk.Label(self._score_frame,
+                               width=8,
+                               height=1,
+                               bg='cyan',
+                               font=('Arial', 16),
+                               borderwidth=7,
+                               text=str(self._percent) + "%")
+        self._score_percent.place(anchor='center', relx=.5, rely=.8)
 
         # create a correct answer label
     def text_input(self, text):
@@ -384,7 +392,7 @@ class Regular(tk.Frame):
 
     def submit_input(self):
         if int(self._minute.get()) == 5:
-            exit()
+            return
         # user input
         input = self._input_text.get(-1.0, "end-1c")
         print(input)
@@ -402,6 +410,8 @@ class Regular(tk.Frame):
         # update the score
         self._score_correct['text'] = self._correct
         self._score_total['text'] = self._total
+        self._percent = str(float(self._correct / self._total) * 100)[0:5]
+        self._score_percent['text'] = self._percent + "%"
         # clear text input box
         self._input_text.delete('1.0', tk.END)
         self._input_text.focus_set()
@@ -412,16 +422,10 @@ class Regular(tk.Frame):
         self._start_button.destroy()
         temp = int(self._minute.get()) * 60 + int(self._second.get())
         while temp > -1:
-            # divmod(firstvalue = temp//60, secondvalue = temp%60)
             mins, secs = divmod(temp, 60)
             # Converting the input entered in mins or secs to hours,
             # mins ,secs(input = 110 min --> 120*60 = 6600 => 1hr :
             # 50min: 0sec)
-            hours = 0
-            if mins > 60:
-                # divmod(firstvalue = temp//60, secondvalue
-                # = temp%60)
-                hours, mins = divmod(mins, 60)
             # using format () method to store the value up to
             # two decimal places
             self._minute.set("{0:2d}".format(mins))
