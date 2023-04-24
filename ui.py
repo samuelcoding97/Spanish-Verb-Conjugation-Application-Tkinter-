@@ -172,6 +172,8 @@ class Regular(tk.Frame):
         self._second.set("00")
         self._infinitive = tk.StringVar()
         self._pronoun = tk.StringVar()
+        self._correct = tk.IntVar()
+        self._total = tk.IntVar()
 
         home_button = tk.Button(self,
                                 text="Spanish Verb Practice",
@@ -198,7 +200,7 @@ class Regular(tk.Frame):
                                 text='<= Go Back',
                                 command=lambda: controller.show_frame(MainPage))
         back_button.place(anchor='center', relx=.25, rely=.1)
-        start_button = tk.Button(self,
+        self._start_button = tk.Button(self,
                                  width=17,
                                  height=2,
                                  bg='orange',
@@ -206,7 +208,7 @@ class Regular(tk.Frame):
                                  borderwidth=7,
                                  text='start',
                                  command=lambda: self.start_time())
-        start_button.place(anchor='center', relx=.4, rely=.35)
+        self._start_button.place(anchor='center', relx=.4, rely=.35)
 
         self._time_frame = tk.Frame(self,
                               width=150,
@@ -240,7 +242,7 @@ class Regular(tk.Frame):
                                   bg='cyan',
                                   font=('Arial', 16),
                                   borderwidth=7,
-                                  textvariable=self._infinitive, )
+                                  textvariable=self._infinitive)
         infinitive_var.place(anchor='center', relx=.4, rely=.5)
 
         pronoun_label = tk.Label(self,
@@ -258,26 +260,63 @@ class Regular(tk.Frame):
                                  bg='cyan',
                                  font=('Arial', 16),
                                  borderwidth=7,
-                                 textvariable=self._pronoun, )
+                                 textvariable=self._pronoun)
         pronoun_var.place(anchor='center', relx=.4, rely=.65)
 
         activity_label = tk.Label(self, text="Regular Verb Practice", font=('Arial', 16))
         activity_label.place(anchor='center', relx=.5, rely=.25)
 
         self._input_text = tk.Text(self,
-                           height=3,
-                           width=10)
-        self._input_text.place(anchor='center', relx=.4, rely=.8)
+                                   height=1.5,
+                                   width=15,
+                                   font="Arial 14")
+        self._input_text.place(anchor='center', relx=.38, rely=.75)
 
         submit_button = tk.Button(self,
                                  width=5,
-                                 height=2,
+                                 height=1,
                                  bg='orange',
                                  font=('Arial', 14),
                                  borderwidth=7,
                                  text='submit',
                                  command=lambda: self.submit_input())
-        submit_button.place(anchor='center', relx=.6, rely=.8)
+        submit_button.place(anchor='center', relx=.48, rely=.75)
+
+        # create a score label
+        score_frame = tk.Frame(self,
+                        width=200,
+                        height=125,
+                        bg='cyan',
+                        borderwidth=7)
+        score_frame.place(anchor='center', relx=.7, rely=.5)
+        score_label = tk.Label(score_frame,
+                                 width=10,
+                                 height=1,
+                                 bg='cyan',
+                                 font=('Arial', 16),
+                                 borderwidth=7,
+                                 text='score', )
+        score_label.place(anchor='center', relx=.5, rely=.2)
+        score_correct = tk.Label(score_frame,
+                                 width=4,
+                                 height=1,
+                                 bg='cyan',
+                                 font=('Arial', 16),
+                                 borderwidth=7,
+                                 textvariable=self._correct)
+        score_correct.place(anchor='center', relx=.3, rely=.6)
+        score_slash = tk.Label(score_frame, width=1, height=1, bg='cyan', font=('Arial', 24), text="/")
+        score_slash.place(anchor='center', relx=.5, rely=.6)
+        score_total = tk.Label(score_frame,
+                                 width=4,
+                                 height=1,
+                                 bg='cyan',
+                                 font=('Arial', 16),
+                                 borderwidth=7,
+                                 textvariable=self._total)
+        score_total.place(anchor='center', relx=.7, rely=.6)
+
+        # create a correct answer label
 
     def display_verb(self, arr):
         tuple = random.choice(arr)
@@ -292,6 +331,9 @@ class Regular(tk.Frame):
         tuple = self.display_verb(regular)
         self._infinitive.set(tuple[1])
         self._pronoun.set(tuple[0])
+        self._correct.set(0)
+        self._total.set(0)
+        self._start_button.destroy()
 
         try:
             # the input provided by the user is
