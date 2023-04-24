@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import messagebox
 from dictionaries import *
 
+
 class Windows(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -49,13 +50,11 @@ class Windows(tk.Tk):
                                justify=tk.LEFT)
         popup_label.place(relx=.1, rely=.2)
         close_button = tk.Button(popup,
-                                font=('Arial', 14),
-                                text='OK',
-                                bg='cyan',
-                                command=lambda: popup.destroy())
+                                 font=('Arial', 14),
+                                 text='OK',
+                                 bg='cyan',
+                                 command=lambda: popup.destroy())
         close_button.place(anchor='center', relx=.8, rely=.8)
-
-
 
 
 class MainPage(tk.Frame):
@@ -172,8 +171,9 @@ class Regular(tk.Frame):
         self._second.set("00")
         self._infinitive = tk.StringVar()
         self._pronoun = tk.StringVar()
-        self._correct = tk.IntVar()
-        self._total = tk.IntVar()
+        self._conjugated = ""
+        self._correct = 0
+        self._total = 0
 
         home_button = tk.Button(self,
                                 text="Spanish Verb Practice",
@@ -201,21 +201,21 @@ class Regular(tk.Frame):
                                 command=lambda: controller.show_frame(MainPage))
         back_button.place(anchor='center', relx=.25, rely=.1)
         self._start_button = tk.Button(self,
-                                 width=17,
-                                 height=2,
-                                 bg='orange',
-                                 font=('Arial', 16),
-                                 borderwidth=7,
-                                 text='start',
-                                 command=lambda: self.start_time())
+                                       width=17,
+                                       height=2,
+                                       bg='orange',
+                                       font=('Arial', 16),
+                                       borderwidth=7,
+                                       text='start',
+                                       command=lambda: self.start_time())
         self._start_button.place(anchor='center', relx=.4, rely=.35)
 
         self._time_frame = tk.Frame(self,
-                              width=150,
-                              height=75,
-                              bg='orange',
-                              relief=tk.GROOVE
-                              )
+                                    width=150,
+                                    height=75,
+                                    bg='orange',
+                                    relief=tk.GROOVE
+                                    )
         self._time_frame.place(anchor='center', relx=.6, rely=.35)
 
         # countdown timer
@@ -228,12 +228,12 @@ class Regular(tk.Frame):
 
         # infinitive and pronoun
         infinitive_label = tk.Label(self,
-                                 width=17,
-                                 height=2,
-                                 bg='cyan',
-                                 font=('Arial', 16),
-                                 borderwidth=7,
-                                 text='Infinitive:',)
+                                    width=17,
+                                    height=2,
+                                    bg='cyan',
+                                    font=('Arial', 16),
+                                    borderwidth=7,
+                                    text='Infinitive:', )
         infinitive_label.place(anchor='center', relx=.2, rely=.5)
 
         infinitive_var = tk.Label(self,
@@ -251,16 +251,16 @@ class Regular(tk.Frame):
                                  bg='cyan',
                                  font=('Arial', 16),
                                  borderwidth=7,
-                                 text='Pronouns',)
+                                 text='Pronouns', )
         pronoun_label.place(anchor='center', relx=.2, rely=.65)
 
         pronoun_var = tk.Label(self,
-                                 width=17,
-                                 height=2,
-                                 bg='cyan',
-                                 font=('Arial', 16),
-                                 borderwidth=7,
-                                 textvariable=self._pronoun)
+                               width=17,
+                               height=2,
+                               bg='cyan',
+                               font=('Arial', 16),
+                               borderwidth=7,
+                               textvariable=self._pronoun)
         pronoun_var.place(anchor='center', relx=.4, rely=.65)
 
         activity_label = tk.Label(self, text="Regular Verb Practice", font=('Arial', 16))
@@ -273,79 +273,147 @@ class Regular(tk.Frame):
         self._input_text.place(anchor='center', relx=.38, rely=.75)
 
         submit_button = tk.Button(self,
-                                 width=5,
-                                 height=1,
-                                 bg='orange',
-                                 font=('Arial', 14),
-                                 borderwidth=7,
-                                 text='submit',
-                                 command=lambda: self.submit_input())
+                                  width=5,
+                                  height=1,
+                                  bg='orange',
+                                  font=('Arial', 14),
+                                  borderwidth=7,
+                                  text='submit',
+                                  command=lambda: self.submit_input())
         submit_button.place(anchor='center', relx=.48, rely=.75)
 
+        a_accent_button = tk.Button(self,
+                                  width=1,
+                                  height=1,
+                                  bg='orange',
+                                  font=('Arial', 14),
+                                  borderwidth=7,
+                                  text='á',
+                                  command=lambda: self.text_input('á'))
+        a_accent_button.place(anchor='center', relx=.2, rely=.85)
+        e_accent_button = tk.Button(self,
+                                  width=1,
+                                  height=1,
+                                  bg='orange',
+                                  font=('Arial', 14),
+                                  borderwidth=7,
+                                  text='é',
+                                  command=lambda: self.text_input('é'))
+        e_accent_button.place(anchor='center', relx=.23, rely=.85)
+        i_accent_button = tk.Button(self,
+                                  width=1,
+                                  height=1,
+                                  bg='orange',
+                                  font=('Arial', 14),
+                                  borderwidth=7,
+                                  text='í',
+                                  command=lambda: self.text_input('í'))
+        i_accent_button.place(anchor='center', relx=.26, rely=.85)
+        o_accent_button = tk.Button(self,
+                                  width=1,
+                                  height=1,
+                                  bg='orange',
+                                  font=('Arial', 14),
+                                  borderwidth=7,
+                                  text='ó',
+                                  command=lambda: self.text_input('ó'))
+        o_accent_button.place(anchor='center', relx=.29, rely=.85)
+        u_accent_button = tk.Button(self,
+                                  width=1,
+                                  height=1,
+                                  bg='orange',
+                                  font=('Arial', 14),
+                                  borderwidth=7,
+                                  text='ú',
+                                  command=lambda: self.text_input('ú'))
+        u_accent_button.place(anchor='center', relx=.32, rely=.85)
+        nyay_accent_button = tk.Button(self,
+                                    width=1,
+                                    height=1,
+                                    bg='orange',
+                                    font=('Arial', 14),
+                                    borderwidth=7,
+                                    text='ñ',
+                                    command=lambda: self.text_input('ñ'))
+        nyay_accent_button.place(anchor='center', relx=.35, rely=.85)
+
         # create a score label
-        score_frame = tk.Frame(self,
-                        width=200,
-                        height=125,
-                        bg='cyan',
-                        borderwidth=7)
-        score_frame.place(anchor='center', relx=.7, rely=.5)
-        score_label = tk.Label(score_frame,
-                                 width=10,
-                                 height=1,
-                                 bg='cyan',
-                                 font=('Arial', 16),
-                                 borderwidth=7,
-                                 text='score', )
+        self._score_frame = tk.Frame(self,
+                               width=200,
+                               height=125,
+                               bg='cyan',
+                               borderwidth=7)
+        self._score_frame.place(anchor='center', relx=.7, rely=.5)
+        score_label = tk.Label(self._score_frame,
+                               width=10,
+                               height=1,
+                               bg='cyan',
+                               font=('Arial', 16),
+                               borderwidth=7,
+                               text='score', )
         score_label.place(anchor='center', relx=.5, rely=.2)
-        score_correct = tk.Label(score_frame,
+        self._score_correct = tk.Label(self._score_frame,
                                  width=4,
                                  height=1,
                                  bg='cyan',
                                  font=('Arial', 16),
                                  borderwidth=7,
-                                 textvariable=self._correct)
-        score_correct.place(anchor='center', relx=.3, rely=.6)
-        score_slash = tk.Label(score_frame, width=1, height=1, bg='cyan', font=('Arial', 24), text="/")
+                                 text=self._correct)
+        self._score_correct.place(anchor='center', relx=.3, rely=.6)
+        score_slash = tk.Label(self._score_frame, width=1, height=1, bg='cyan', font=('Arial', 24), text="/")
         score_slash.place(anchor='center', relx=.5, rely=.6)
-        score_total = tk.Label(score_frame,
-                                 width=4,
-                                 height=1,
-                                 bg='cyan',
-                                 font=('Arial', 16),
-                                 borderwidth=7,
-                                 textvariable=self._total)
-        score_total.place(anchor='center', relx=.7, rely=.6)
+        self._score_total = tk.Label(self._score_frame,
+                               width=4,
+                               height=1,
+                               bg='cyan',
+                               font=('Arial', 16),
+                               borderwidth=7,
+                               text=self._total)
+        self._score_total.place(anchor='center', relx=.7, rely=.6)
 
         # create a correct answer label
+    def text_input(self, text):
+        self._input_text.insert(tk.INSERT, text)
+        print(text)
 
     def display_verb(self, arr):
         tuple = random.choice(arr)
-        return tuple
-
-    def submit_input(self):
-        input = self._input_text.get(1.0, "end-1c")
-        print(input)
-        # lbl.config(text="Provided Input: " + input)
-
-    def start_time(self):
-        tuple = self.display_verb(regular)
         self._infinitive.set(tuple[1])
         self._pronoun.set(tuple[0])
-        self._correct.set(0)
-        self._total.set(0)
+        self._conjugated = tuple[2]
+
+    def submit_input(self):
+        if int(self._minute.get()) == 5:
+            exit()
+        # user input
+        input = self._input_text.get(-1.0, "end-1c")
+        print(input)
+        print(self._conjugated)
+        # if the string match case insensitively increment the correct total
+        if input.lower() == self._conjugated:
+            self._correct += 1
+            print("correct")
+        # increment the total number of questions answered
+        else:
+            print("incorrect")
+        self._total += 1
+        # update the verb
+        self.display_verb(regular)
+        # update the score
+        self._score_correct['text'] = self._correct
+        self._score_total['text'] = self._total
+        # clear text input box
+        self._input_text.delete('1.0', tk.END)
+        self._input_text.focus_set()
+
+    def start_time(self):
+        self._input_text.focus_set()
+        self.display_verb(regular)
         self._start_button.destroy()
-
-        try:
-            # the input provided by the user is
-            # stored in here :temp
-            temp = int(self._minute.get()) * 60 + int(self._second.get())
-        except:
-            print("Please input the right value")
+        temp = int(self._minute.get()) * 60 + int(self._second.get())
         while temp > -1:
-
             # divmod(firstvalue = temp//60, secondvalue = temp%60)
             mins, secs = divmod(temp, 60)
-
             # Converting the input entered in mins or secs to hours,
             # mins ,secs(input = 110 min --> 120*60 = 6600 => 1hr :
             # 50min: 0sec)
@@ -354,26 +422,21 @@ class Regular(tk.Frame):
                 # divmod(firstvalue = temp//60, secondvalue
                 # = temp%60)
                 hours, mins = divmod(mins, 60)
-
             # using format () method to store the value up to
             # two decimal places
             self._minute.set("{0:2d}".format(mins))
             self._second.set("{0:2d}".format(secs))
-
             # updating the GUI window after decrementing the
             # temp value every time
             self._time_frame.update()
             time.sleep(1)
-
             # when temp value = 0; then a messagebox pop's up
             # with a message:"Time's up"
             if (temp == 0):
                 messagebox.showinfo("Time Countdown", "Time's up ")
-
             # after every one sec the value of temp will be decremented
             # by one
             temp -= 1
-
 
 
 class StemChange(tk.Frame):
