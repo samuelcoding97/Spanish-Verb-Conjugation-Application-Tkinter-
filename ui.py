@@ -1,5 +1,7 @@
+import time
 import tkinter as tk
-# from tkinter import ttk
+from tkinter import messagebox
+from dictionaries import *
 
 class Windows(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -43,14 +45,17 @@ class Windows(tk.Tk):
                                     'this application select one of the options\n'
                                     'below. If you are new to the application, \n'
                                     'try the first option, “Regular Verbs”.      ',
-                               font='Arial 14')
-        popup_label.place(anchor='w', relx=.1, rely=.4)
+                               font='Arial 14',
+                               justify=tk.LEFT)
+        popup_label.place(relx=.1, rely=.2)
         close_button = tk.Button(popup,
                                 font=('Arial', 14),
                                 text='OK',
                                 bg='cyan',
                                 command=lambda: popup.destroy())
         close_button.place(anchor='center', relx=.8, rely=.8)
+
+
 
 
 class MainPage(tk.Frame):
@@ -159,6 +164,14 @@ class MainPage(tk.Frame):
 class Regular(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        # Declaration of variables
+        self._minute = tk.StringVar()
+        self._second = tk.StringVar()
+        # setting the default value as 0
+        self._minute.set("05")
+        self._second.set("00")
+        self._infinitive = tk.StringVar()
+        self._pronoun = tk.StringVar()
 
         home_button = tk.Button(self,
                                 text="Spanish Verb Practice",
@@ -172,10 +185,10 @@ class Regular(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-                                fg='blue',
-                                relief='flat',
-                                font='Arial 12 underline',
-                                text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
@@ -185,9 +198,140 @@ class Regular(tk.Frame):
                                 text='<= Go Back',
                                 command=lambda: controller.show_frame(MainPage))
         back_button.place(anchor='center', relx=.25, rely=.1)
+        start_button = tk.Button(self,
+                                 width=17,
+                                 height=2,
+                                 bg='orange',
+                                 font=('Arial', 16),
+                                 borderwidth=7,
+                                 text='start',
+                                 command=lambda: self.start_time())
+        start_button.place(anchor='center', relx=.4, rely=.35)
 
-        activity_label = tk.Label(self, text="Regular Verb Practice", font=('Arial', 16), )
+        self._time_frame = tk.Frame(self,
+                              width=150,
+                              height=75,
+                              bg='orange',
+                              relief=tk.GROOVE
+                              )
+        self._time_frame.place(anchor='center', relx=.6, rely=.35)
+
+        # countdown timer
+        minuteEntry = tk.Label(self._time_frame, width=2, font=("Arial", 18, ""), textvariable=self._minute)
+        minuteEntry.place(relx=.25, rely=.3)
+        colon = tk.Label(self._time_frame, width=1, font=("Arial", 18, ""), text=":")
+        colon.place(relx=.45, rely=.3)
+        secondEntry = tk.Label(self._time_frame, width=2, font=("Arial", 18, ""), textvariable=self._second)
+        secondEntry.place(relx=.55, rely=.3)
+
+        # infinitive and pronoun
+        infinitive_label = tk.Label(self,
+                                 width=17,
+                                 height=2,
+                                 bg='cyan',
+                                 font=('Arial', 16),
+                                 borderwidth=7,
+                                 text='Infinitive:',)
+        infinitive_label.place(anchor='center', relx=.2, rely=.5)
+
+        infinitive_var = tk.Label(self,
+                                  width=17,
+                                  height=2,
+                                  bg='cyan',
+                                  font=('Arial', 16),
+                                  borderwidth=7,
+                                  textvariable=self._infinitive, )
+        infinitive_var.place(anchor='center', relx=.4, rely=.5)
+
+        pronoun_label = tk.Label(self,
+                                 width=17,
+                                 height=2,
+                                 bg='cyan',
+                                 font=('Arial', 16),
+                                 borderwidth=7,
+                                 text='Pronouns',)
+        pronoun_label.place(anchor='center', relx=.2, rely=.65)
+
+        pronoun_var = tk.Label(self,
+                                 width=17,
+                                 height=2,
+                                 bg='cyan',
+                                 font=('Arial', 16),
+                                 borderwidth=7,
+                                 textvariable=self._pronoun, )
+        pronoun_var.place(anchor='center', relx=.4, rely=.65)
+
+        activity_label = tk.Label(self, text="Regular Verb Practice", font=('Arial', 16))
         activity_label.place(anchor='center', relx=.5, rely=.25)
+
+        self._input_text = tk.Text(self,
+                           height=3,
+                           width=10)
+        self._input_text.place(anchor='center', relx=.4, rely=.8)
+
+        submit_button = tk.Button(self,
+                                 width=5,
+                                 height=2,
+                                 bg='orange',
+                                 font=('Arial', 14),
+                                 borderwidth=7,
+                                 text='submit',
+                                 command=lambda: self.submit_input())
+        submit_button.place(anchor='center', relx=.6, rely=.8)
+
+    def display_verb(self, arr):
+        tuple = random.choice(arr)
+        return tuple
+
+    def submit_input(self):
+        input = self._input_text.get(1.0, "end-1c")
+        print(input)
+        # lbl.config(text="Provided Input: " + input)
+
+    def start_time(self):
+        tuple = self.display_verb(regular)
+        self._infinitive.set(tuple[1])
+        self._pronoun.set(tuple[0])
+
+        try:
+            # the input provided by the user is
+            # stored in here :temp
+            temp = int(self._minute.get()) * 60 + int(self._second.get())
+        except:
+            print("Please input the right value")
+        while temp > -1:
+
+            # divmod(firstvalue = temp//60, secondvalue = temp%60)
+            mins, secs = divmod(temp, 60)
+
+            # Converting the input entered in mins or secs to hours,
+            # mins ,secs(input = 110 min --> 120*60 = 6600 => 1hr :
+            # 50min: 0sec)
+            hours = 0
+            if mins > 60:
+                # divmod(firstvalue = temp//60, secondvalue
+                # = temp%60)
+                hours, mins = divmod(mins, 60)
+
+            # using format () method to store the value up to
+            # two decimal places
+            self._minute.set("{0:2d}".format(mins))
+            self._second.set("{0:2d}".format(secs))
+
+            # updating the GUI window after decrementing the
+            # temp value every time
+            self._time_frame.update()
+            time.sleep(1)
+
+            # when temp value = 0; then a messagebox pop's up
+            # with a message:"Time's up"
+            if (temp == 0):
+                messagebox.showinfo("Time Countdown", "Time's up ")
+
+            # after every one sec the value of temp will be decremented
+            # by one
+            temp -= 1
+
 
 
 class StemChange(tk.Frame):
@@ -206,10 +350,10 @@ class StemChange(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-            fg='blue',
-            relief='flat',
-            font='Arial 12 underline',
-            text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
@@ -240,10 +384,10 @@ class SpellChange(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-            fg='blue',
-            relief='flat',
-            font='Arial 12 underline',
-            text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
@@ -274,10 +418,10 @@ class Reflexive(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-            fg='blue',
-            relief='flat',
-            font='Arial 12 underline',
-            text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
@@ -308,10 +452,10 @@ class IrregularYo(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-            fg='blue',
-            relief='flat',
-            font='Arial 12 underline',
-            text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
@@ -342,10 +486,10 @@ class Irregular(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-            fg='blue',
-            relief='flat',
-            font='Arial 12 underline',
-            text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
@@ -376,10 +520,10 @@ class AllVerbs(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-            fg='blue',
-            relief='flat',
-            font='Arial 12 underline',
-            text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
@@ -410,10 +554,10 @@ class Advanced(tk.Frame):
         home_button.pack(padx=10, pady=10)
 
         help_button = tk.Button(self,
-            fg='blue',
-            relief='flat',
-            font='Arial 12 underline',
-            text='help')
+                                bg='cyan',
+                                font='Arial 14',
+                                text='Help',
+                                command=lambda: controller.help_popup())
         help_button.place(anchor='center', relx=.27, rely=.2)
 
         back_button = tk.Button(self,
