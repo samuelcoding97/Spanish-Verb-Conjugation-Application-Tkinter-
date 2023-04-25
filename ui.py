@@ -172,6 +172,7 @@ class Regular(tk.Frame):
         self._infinitive = tk.StringVar()
         self._pronoun = tk.StringVar()
         self._conjugated = ""
+        self._meaning = ""
         self._correct = 0
         self._total = 0
         self._percent = "-"
@@ -389,6 +390,30 @@ class Regular(tk.Frame):
         self._infinitive.set(tuple[1])
         self._pronoun.set(tuple[0])
         self._conjugated = tuple[2]
+        self._meaning = tuple[3]
+
+    def correct_input(self, input):
+        correct_label = tk.Label(self,
+                               width=17,
+                               height=7,
+                               bg='light green',
+                               font=('Arial', 16),
+                               borderwidth=7,
+                               text='CORRECT!\nYou wrote: ' + input + "\n\'" + self._meaning + "\'.")
+        correct_label.place(anchor='center', relx=.7, rely=.8)
+        #time.sleep(5)
+        # correct_label.destroy()
+
+    def incorrect_input(self, input):
+        incorrect_label = tk.Label(self,
+                               width=17,
+                               height=7,
+                               bg='#ff474c',
+                               font=('Arial', 16),
+                               borderwidth=7,
+                               text='INCORRECT!\nYou wrote: ' + input + "\nCorrect Answer: "
+                               + self._conjugated + "\n\'" + self._meaning + "\'.")
+        incorrect_label.place(anchor='center', relx=.7, rely=.8)
 
     def submit_input(self):
         if int(self._minute.get()) == 5:
@@ -400,9 +425,11 @@ class Regular(tk.Frame):
         # if the string match case insensitively increment the correct total
         if input.lower() == self._conjugated:
             self._correct += 1
+            self.correct_input(input)
             print("correct")
         # increment the total number of questions answered
         else:
+            self.incorrect_input(input)
             print("incorrect")
         self._total += 1
         # update the verb
